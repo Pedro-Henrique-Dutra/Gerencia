@@ -1,0 +1,79 @@
+
+{% extends "dashboard.html" %}
+
+{% block title %}Dashboard | Solicitações{% endblock %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-1">Solicitações {{ tipo_solicitacao }}s</h2>
+<p class="text-secondary">Monitoramento das automações</p>
+
+<div class="row g-3 my-3">
+
+    {% for label, value in metrics.items() %}
+
+    <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <p class="text-secondary mb-1">
+                    {{ label|capitalize }}
+                </p>
+
+                <h2 class="fw-bold">{{ value }}</h2>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+
+        <h5 class="fw-bold mb-3">
+            Últimas atividades {{ tipo_solicitacao }}
+        </h5>
+
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Assunto</th>
+                        <th>Horário</th>
+                        <th>Status</th>
+                        <th>Protocolo</th>
+                        <th>Prioridade</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in activities %}
+                    <tr>
+                        <td>{{ item.subject }}</td>
+                        <td>{{ item.created_at.strftime('%Y-%m-%d %H:%M:%S') if item.created_at else '' }}</td>
+                        <td>
+                            <span class="badge
+                                {% if item.status == 'Concluído' %}
+                                    bg-success
+                                {% elif item.status == 'Erro' %}
+                                    bg-danger
+                                {% else %}
+                                    bg-warning text-dark
+                                {% endif %}">
+                                {{ item.status }}
+                            </span>
+                        </td>
+                        <td>{{ item.id }}</td>
+                        
+                        <td>{{ prioridades.get(item.prioridade, "Não definida") }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}

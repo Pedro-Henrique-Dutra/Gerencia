@@ -1,0 +1,103 @@
+## ==========================================
+## FRAMEWORK E SERVIDOR
+## ==========================================
+#fastapi
+#uvicorn[standard]
+#
+## ==========================================
+## TEMPLATES E INTERFACE WEB
+## ==========================================
+#jinja2
+#python-multipart
+#itsdangerous
+#aiofiles
+#
+## ==========================================
+## BANCO DE DADOS POSTGRESQL
+## ==========================================
+#sqlalchemy
+#psycopg[binary]
+#alembic
+#
+## ==========================================
+## VALIDAÇÃO E CONFIGURAÇÕES
+## ==========================================
+#pydantic
+#pydantic-settings
+#python-dotenv
+#
+## ==========================================
+## MANIPULAÇÃO E ANÁLISE DE DADOS
+## ==========================================
+#pandas
+#numpy
+#
+## ==========================================
+## GRÁFICOS E DASHBOARD
+## ==========================================
+#plotly
+#matplotlib
+#
+## ==========================================
+## EXPORTAÇÃO WORD
+## ==========================================
+#python-docx
+#docxtpl
+#
+## ==========================================
+## EXPORTAÇÃO EXCEL
+## ==========================================
+#openpyxl
+#xlsxwriter
+#
+## ==========================================
+## IMAGENS E ARQUIVOS
+## ==========================================
+#pillow
+#
+## ==========================================
+## AUTENTICAÇÃO E SEGURANÇA
+## ==========================================
+#pwdlib[argon2]
+#python-jose[cryptography]
+#
+## ==========================================
+## LOGS
+## ==========================================
+#loguru
+#
+## ==========================================
+## TESTES
+## ==========================================
+#pytest
+#httpx
+
+
+
+# Framework
+Flask>=3.1,<4
+
+# Banco de dados
+Flask-SQLAlchemy>=3.1,<4
+SQLAlchemy>=2.0,<3
+psycopg[binary]>=3.2,<4
+
+# Migrações
+Flask-Migrate>=4.1,<5
+
+# Variáveis de ambiente
+python-dotenv>=1.0,<2
+
+# Formulários e proteção CSRF
+Flask-WTF>=1.2,<2
+WTForms>=3.2,<4
+
+# Validação
+marshmallow>=3.26,<5
+
+# Servidor WSGI
+gunicorn>=23,<24
+
+# Testes
+pytest>=8.3,<10
+pytest-cov

@@ -1,0 +1,92 @@
+services:
+  python:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: projeto_python
+
+    working_dir: /app
+
+    volumes:
+      - ./app:/app
+
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+
+      FLASK_APP: main.py
+      FLASK_DEBUG: "1"
+
+      SECRET_KEY: ${SECRET_KEY}
+
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "127.0.0.1:8081:5000"
+
+    command: flask --app main run --host=0.0.0.0 --port=5000 --debug
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    networks:
+     - rede_interna
+    #networks:
+     # rede_interna:
+      ## internal: true
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    tmpfs:
+      - /tmp
+
+    restart: "no"
+
+  postgres:
+    image: postgres:17
+
+    container_name: projeto_postgres
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - rede_interna
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+    security_opt:
+      - no-new-privileges:true
+
+    
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  rede_interna:
+    driver: bridge
+    #internal: true
