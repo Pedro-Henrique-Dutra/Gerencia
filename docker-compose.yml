@@ -82,6 +82,8 @@ services:
 
     
     restart: unless-stopped
+
+    
   telegram_bot:
     build:
       context: .
