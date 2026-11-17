@@ -48,20 +48,26 @@ class Activity(db.Model):
         default=0
     )
 
-    def to_dict(self):
+    origem = db.Column(
+        db.String(30),
+        nullable= False,
+        default="Site"
+    )
 
+    def to_dict(self):
         return {
             "id": self.id,
             "subject": self.subject,
-            "interno": self.status_interno,
             "status": self.status,
+            "status_interno": self.status_interno,
             "responsavel": self.responsable,
+            "prioridade": self.prioridade,
+            "origem": self.origem,
             "created_at": (
-            self.created_at.isoformat()
-            if self.created_at else None
+                self.created_at.isoformat()
+                if self.created_at else None
             )
         }
-
     def __repr__(self):
 
         return f"<Activity {self.subject}>"

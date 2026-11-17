@@ -29,31 +29,31 @@
 ## ==========================================
 ## MANIPULAÇÃO E ANÁLISE DE DADOS
 ## ==========================================
-#pandas
-#numpy
+pandas
+numpy
 #
 ## ==========================================
 ## GRÁFICOS E DASHBOARD
 ## ==========================================
-#plotly
-#matplotlib
+plotly
+matplotlib
 #
 ## ==========================================
 ## EXPORTAÇÃO WORD
 ## ==========================================
-#python-docx
+python-docx
 #docxtpl
 #
 ## ==========================================
 ## EXPORTAÇÃO EXCEL
 ## ==========================================
-#openpyxl
+openpyxl
 #xlsxwriter
 #
 ## ==========================================
 ## IMAGENS E ARQUIVOS
 ## ==========================================
-#pillow
+pillow
 #
 ## ==========================================
 ## AUTENTICAÇÃO E SEGURANÇA
@@ -101,3 +101,9 @@ gunicorn>=23,<24
 # Testes
 pytest>=8.3,<10
 pytest-cov
+
+# Telegram
+python-telegram-bot>=21,<23
+
+# Comunicação HTTP assíncrona
+httpx>=0.27,<1

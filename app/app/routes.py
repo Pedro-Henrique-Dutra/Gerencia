@@ -4,7 +4,8 @@ from flask import (
     )
 from app.models import Activity
 from app import db
-from app.functions_proc import transformador_prioridade_num_texto, transformador_prioridade_texto_num, Prioridades
+from app.services.functions_proc import transformador_prioridade_num_texto, transformador_prioridade_texto_num, Prioridades, registrar_atividade
+
 
 main = Blueprint("main", __name__)
 
@@ -194,44 +195,38 @@ def Nova_solicitacao():
     return render_template("nova_solicitacao.html")
 
   
+
 @main.route("/api/envio", methods=["POST"])
 def envio():
 
-    if request.is_json:
-        # recebe o conteúdo em json
-        dados = request.get_json()
-        # modela a atividade pcom base nos dados recebidos, ele procura e atribui ao campo subject o subject que veio e adiciona o  status pendente
-        if not dados:
-            return jsonify({
-                "erro": "Envie um JSON válido"
-            }), 400
+    dados = request.get_json(silent=True)
 
-        subject = dados.get("subject")
+    if not dados or not dados.get("subject"):
+        return jsonify({
+            "erro": "O campo subject é obrigatório"
+        }), 400
 
-        if not subject:
-            return jsonify({
-                "erro": "O campo subject é obrigatório"
-            }), 400
-        if dados.get("status"):
-            status= dados.get("status")
-        if dados.get("resposavel"):
-            responsavel = dados.get("responsavel")
-        atividade = Activity(
-            subject=str(subject),
-            status= str(status),
-            responsavel= str(responsavel)
+    try:
+        atividade = registrar_atividade(
+            subject=dados["subject"],
+            origem=dados.get("origem", "API"),
+            prioridade=dados.get("prioridade", 0),
+            responsavel=dados.get("responsavel")
         )
 
-        db.session.add(atividade)
-        db.session.commit()
+        return jsonify({
+            "success": True,
+            "dados": atividade.to_dict()
+        }), 201
 
-    else:
-        dados = request.form.to_dict()
+    except (ValueError, TypeError) as e:
+        return jsonify({"erro": str(e)}), 400
 
-    return jsonify({
-        "mensagem": "Dados recebidos",
-        "dados": atividade.to_dict()
-    }), 200
+    except Exception as e:
+        return jsonify({
+            "erro": "Erro ao cadastrar",
+            "detalhes": str(e)
+        }), 500
 
 
 @main.route("/api/atualiza", methods=["PUT"])

@@ -82,6 +82,47 @@ services:
 
     
     restart: unless-stopped
+  telegram_bot:
+    build:
+      context: .
+      dockerfile: dockerfile
+
+    container_name: projeto_telegram
+
+    working_dir: /app
+
+    volumes:
+      - ./app:/app
+
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+
+      FLASK_API_URL: http://python:5000
+
+    command: python -m app.integrations.telegram_bot
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      python:
+        condition: service_started
+
+    networks:
+      - rede_interna
+
+    security_opt:
+      - no-new-privileges:true
+
+    cap_drop:
+      - ALL
+
+    tmpfs:
+      - /tmp
+
+    restart: unless-stopped
 
 volumes:
   postgres_data:
